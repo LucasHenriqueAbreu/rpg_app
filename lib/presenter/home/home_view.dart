@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rpg_app/presenter/arena/arena_view.dart';
 import 'package:rpg_app/presenter/historico/historico_view.dart';
-import 'package:rpg_app/presenter/personagens/personagens_view.dart';
+import 'package:rpg_app/presenter/personagens/views/personagens_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

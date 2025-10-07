@@ -12,6 +12,9 @@ class Monstro extends Personagem {
     required super.escudo,
     required super.velocidade,
     required super.raca,
+    required super.arquetipo,
   }) : _origem = origem,
        _tipoCriatura = tipoCriatura;
+
+  String descricao() => 'Monstro $_tipoCriatura da região de $_origem';
 }

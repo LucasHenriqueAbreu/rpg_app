@@ -1,3 +1,4 @@
+import 'package:rpg_app/domain/entities/arquetipo.dart';
 import 'package:rpg_app/domain/entities/raca.dart';
 
 abstract class Personagem {
@@ -6,6 +7,7 @@ abstract class Personagem {
   final int _escudo;
   final int _velocidade;
   final Raca _raca;
+  final Arquetipo _arquetipo;
 
   Personagem({
     required String nome,
@@ -13,16 +15,22 @@ abstract class Personagem {
     required int escudo,
     required int velocidade,
     required Raca raca,
+    required Arquetipo arquetipo,
   }) : _nome = nome,
        _vida = vida + raca.bonusVida,
        _escudo = escudo + raca.bonusEscudo,
        _velocidade = velocidade,
-       _raca = raca;
+       _raca = raca,
+       _arquetipo = arquetipo;
 
   String get nome => _nome;
   int get vida => _vida;
   int get escudo => _escudo;
   int get velocidade => _velocidade;
+  Raca get raca => _raca;
+  Arquetipo get arquetipo => _arquetipo;
+
+  String descricao();
 
   void defender(int dano) {
     var danoReal = dano - _escudo;
