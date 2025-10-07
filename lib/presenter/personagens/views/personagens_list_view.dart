@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rpg_app/domain/entities/heroi.dart';
 import 'package:rpg_app/domain/entities/monstro.dart';
 import 'package:rpg_app/domain/entities/personagem.dart';
+import 'package:rpg_app/domain/usecases/get_personagem_image.dart';
 import 'package:rpg_app/presenter/personagens/view_model/personagens_viewmodel.dart';
 
 class PersonagensListView extends StatefulWidget {
@@ -40,11 +41,10 @@ class _PersonagensListViewState extends State<PersonagensListView> {
   }
 
   Widget _buildCard(Personagem personagem) {
-    final Icon icon = _iconePersonagem(personagem);
+    final Widget icon = _getLeading(personagem);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 3,
       child: ListTile(
         leading: icon,
         title: Text(
@@ -64,13 +64,10 @@ class _PersonagensListViewState extends State<PersonagensListView> {
     );
   }
 
-  Icon _iconePersonagem(Personagem personagem) {
-    if (personagem is Heroi) {
-      return const Icon(Icons.shield, color: Colors.blue);
-    }
-    if (personagem is Monstro) {
-      return const Icon(Icons.pets, color: Colors.redAccent);
-    }
-    return const Icon(Icons.person, color: Colors.grey);
+  Widget _getLeading(Personagem personagem) {
+    return Image.asset(
+      GetPersonagemImageUsecase.execute(personagem.raca, personagem.arquetipo),
+      fit: BoxFit.contain,
+    );
   }
 }

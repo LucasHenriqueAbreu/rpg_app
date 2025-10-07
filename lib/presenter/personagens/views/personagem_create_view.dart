@@ -27,18 +27,11 @@ class PersonagemCreateView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             DropdownButton<Raca>(
+              // decoration: const InputDecoration(border: OutlineInputBorder()),
               isExpanded: true,
               value: viewModel.racaSelecionada,
               hint: const Text('Escolha uma raça'),
-              items:
-                  racas
-                      .map(
-                        (raca) => DropdownMenuItem(
-                          value: raca,
-                          child: Text(raca.runtimeType.toString()),
-                        ),
-                      )
-                      .toList(),
+              items: _buildItens(racas),
               onChanged: (value) {
                 if (value != null) {
                   viewModel.setRaca(value);
@@ -47,18 +40,11 @@ class PersonagemCreateView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             DropdownButton<Arquetipo>(
+              // elevation: const InputDecoration(border: OutlineInputBorder()),
               isExpanded: true,
               value: viewModel.arquetipoSelecionado,
               hint: const Text('Escolha um arquétipo'),
-              items:
-                  arquetipos
-                      .map(
-                        (arquetipo) => DropdownMenuItem(
-                          value: arquetipo,
-                          child: Text(arquetipo.runtimeType.toString()),
-                        ),
-                      )
-                      .toList(),
+              items: _buildItens(arquetipos),
               onChanged: (value) {
                 if (value != null) {
                   viewModel.setArquetipo(value);
@@ -91,5 +77,16 @@ class PersonagemCreateView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<DropdownMenuItem<T>> _buildItens<T>(List<T> dataItens) {
+    return dataItens
+        .map(
+          (item) => DropdownMenuItem<T>(
+            value: item,
+            child: Text(item.runtimeType.toString()),
+          ),
+        )
+        .toList();
   }
 }
