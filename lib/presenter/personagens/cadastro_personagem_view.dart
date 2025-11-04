@@ -39,17 +39,17 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
       body: Column(
         children: [
           Image.asset(_imgHeroi),
-          DropdownButton(
-            items: _buildMenuItemsRaca(),
+          DropdownButton<Raca>(
+            items: _buildMenuItensRaca(),
             onChanged: (raca) {
               _racaSelecionada = raca;
               _trocarImage();
             },
           ),
-          DropdownButton(
-            items: _buildMenuItemsRaca(),
-            onChanged: (raca) {
-              _racaSelecionada = raca;
+          DropdownButton<Arquetipo>(
+            items: _buildMenuItensArquetipo(),
+            onChanged: (arquetipo) {
+              _arquetipoSelecionado = arquetipo;
               _trocarImage();
             },
           ),
@@ -58,11 +58,22 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
     );
   }
 
-  List<DropdownMenuItem<Raca>> _buildMenuItemsRaca() {
+  List<DropdownMenuItem<Raca>> _buildMenuItensRaca() {
     return _racas
         .map(
           (raca) =>
               DropdownMenuItem(value: raca, child: Text(_getRacaName(raca))),
+        )
+        .toList();
+  }
+
+  List<DropdownMenuItem<Arquetipo>> _buildMenuItensArquetipo() {
+    return _arquetipos
+        .map(
+          (arquetipo) => DropdownMenuItem(
+            value: arquetipo,
+            child: Text(arquetipo.getName()),
+          ),
         )
         .toList();
   }
