@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rpg_app/domain/entities/anao.dart';
+import 'package:rpg_app/domain/entities/arqueiro.dart';
+import 'package:rpg_app/domain/entities/arquetipo.dart';
 import 'package:rpg_app/domain/entities/elfo.dart';
+import 'package:rpg_app/domain/entities/guerreiro.dart';
 import 'package:rpg_app/domain/entities/humano.dart';
+import 'package:rpg_app/domain/entities/mago.dart';
 import 'package:rpg_app/domain/entities/orc.dart';
 import 'package:rpg_app/domain/entities/raca.dart';
 
@@ -21,6 +25,12 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
     Anao(bonusVida: 12, bonusEscudo: 6, bonusAtaque: 12),
   ];
   Raca? _racaSelecionada;
+  final List<Arquetipo> _arquetipos = [
+    Guerreiro(bonusVida: 8, bonusEscudo: 8, bonusAtaque: 14),
+    Arqueiro(bonusVida: 5, bonusEscudo: 5, bonusAtaque: 20),
+    Mago(bonusVida: 5, bonusEscudo: 10, bonusAtaque: 15),
+  ];
+  Arquetipo? _arquetipoSelecionado;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +39,13 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
       body: Column(
         children: [
           Image.asset(_imgHeroi),
+          DropdownButton(
+            items: _buildMenuItemsRaca(),
+            onChanged: (raca) {
+              _racaSelecionada = raca;
+              _trocarImage();
+            },
+          ),
           DropdownButton(
             items: _buildMenuItemsRaca(),
             onChanged: (raca) {
