@@ -17,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home')),
+      appBar: AppBar(title: Text('Home $_itemSelecionado')),
       body: _telas[_itemSelecionado],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _itemSelecionado,
