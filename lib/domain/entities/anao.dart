@@ -6,4 +6,9 @@ class Anao extends Raca {
     required super.bonusEscudo,
     required super.bonusAtaque,
   });
+
+  @override
+  String getName() {
+    return 'Anão';
+  }
 }

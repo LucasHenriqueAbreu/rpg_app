@@ -14,4 +14,6 @@ abstract class Raca {
   int get bonusVida => _bonusVida;
   int get bonusEscudo => _bonusEscudo;
   int get bonusAtaque => _bonusAtaque;
+
+  String getName();
 }

@@ -36,24 +36,33 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Cadastro de herois')),
-      body: Column(
-        children: [
-          Image.asset(_imgHeroi),
-          DropdownButton<Raca>(
-            items: _buildMenuItensRaca(),
-            onChanged: (raca) {
-              _racaSelecionada = raca;
-              _trocarImage();
-            },
+      body: Padding(
+        padding: EdgeInsets.all(15),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.asset(_imgHeroi, height: 300, fit: BoxFit.contain),
+              DropdownButton<Raca>(
+                value: _racaSelecionada,
+                items: _buildMenuItensRaca(),
+                onChanged: (raca) {
+                  _racaSelecionada = raca;
+                  _trocarImage();
+                },
+              ),
+              DropdownButton<Arquetipo>(
+                value: _arquetipoSelecionado,
+                items: _buildMenuItensArquetipo(),
+                onChanged: (arquetipo) {
+                  _arquetipoSelecionado = arquetipo;
+                  _trocarImage();
+                },
+              ),
+            ],
           ),
-          DropdownButton<Arquetipo>(
-            items: _buildMenuItensArquetipo(),
-            onChanged: (arquetipo) {
-              _arquetipoSelecionado = arquetipo;
-              _trocarImage();
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -61,8 +70,7 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   List<DropdownMenuItem<Raca>> _buildMenuItensRaca() {
     return _racas
         .map(
-          (raca) =>
-              DropdownMenuItem(value: raca, child: Text(_getRacaName(raca))),
+          (raca) => DropdownMenuItem(value: raca, child: Text(raca.getName())),
         )
         .toList();
   }
@@ -76,19 +84,6 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
           ),
         )
         .toList();
-  }
-
-  String _getRacaName(Raca raca) {
-    if (raca is Humano) {
-      return 'Humano';
-    }
-    if (raca is Orc) {
-      return 'Orc';
-    }
-    if (raca is Elfo) {
-      return 'Elfo';
-    }
-    return 'Anão';
   }
 
   void _trocarImage() {
