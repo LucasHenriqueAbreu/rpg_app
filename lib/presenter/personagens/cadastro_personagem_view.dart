@@ -44,10 +44,9 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(_imgHeroi, height: 300, fit: BoxFit.contain),
-              DropdownButton<Raca>(
-                value: _racaSelecionada,
-                items: _buildMenuItensRaca(),
-                onChanged: (raca) {
+              DropdownMenu<Raca>(
+                dropdownMenuEntries: _buildMenuItensRaca(),
+                onSelected: (raca) {
                   _racaSelecionada = raca;
                   _trocarImage();
                 },
@@ -67,11 +66,9 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
     );
   }
 
-  List<DropdownMenuItem<Raca>> _buildMenuItensRaca() {
+  List<DropdownMenuEntry<Raca>> _buildMenuItensRaca() {
     return _racas
-        .map(
-          (raca) => DropdownMenuItem(value: raca, child: Text(raca.getName())),
-        )
+        .map((raca) => DropdownMenuEntry(value: raca, label: raca.getName()))
         .toList();
   }
 
@@ -94,6 +91,15 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
 
   String _getImage() {
     if (_racaSelecionada is Humano) {
+      if (_arquetipoSelecionado is Arqueiro) {
+        return 'personagens/human/human_archer.png';
+      }
+      if (_arquetipoSelecionado is Mago) {
+        return 'personagens/human/human_mage.png';
+      }
+      if (_arquetipoSelecionado is Guerreiro) {
+        return 'personagens/human/human_warrior.png';
+      }
       return 'personagens/human/human_neutral.png';
     }
     if (_racaSelecionada is Orc) {
