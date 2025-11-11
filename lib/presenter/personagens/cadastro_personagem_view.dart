@@ -31,6 +31,10 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
     Mago(bonusVida: 5, bonusEscudo: 10, bonusAtaque: 15),
   ];
   Arquetipo? _arquetipoSelecionado;
+  int _pontosDisponiveis = 30;
+  int _pontosVida = 0;
+  final int _pontosEscudo = 0;
+  final int _pontosVelocidade = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,26 +44,53 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
         padding: EdgeInsets.all(15),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset(_imgHeroi, height: 300, fit: BoxFit.contain),
-              DropdownMenu<Raca>(
-                dropdownMenuEntries: _buildMenuItensRaca(),
-                onSelected: (raca) {
-                  _racaSelecionada = raca;
-                  _trocarImage();
-                },
-              ),
-              DropdownButton<Arquetipo>(
-                value: _arquetipoSelecionado,
-                items: _buildMenuItensArquetipo(),
-                onChanged: (arquetipo) {
-                  _arquetipoSelecionado = arquetipo;
-                  _trocarImage();
-                },
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset(_imgHeroi, height: 300, fit: BoxFit.contain),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DropdownMenu<Raca>(
+                      initialSelection: _racas[0],
+                      dropdownMenuEntries: _buildMenuItensRaca(),
+                      label: Text('Raça'),
+                      onSelected: (raca) {
+                        _racaSelecionada = raca;
+                        _trocarImage();
+                      },
+                    ),
+                    SizedBox(width: 10),
+                    DropdownMenu<Arquetipo>(
+                      initialSelection: _arquetipos[0],
+                      dropdownMenuEntries: _buildMenuItensArquetipo(),
+                      label: Text('Arquetipo'),
+                      onSelected: (arquetipo) {
+                        _arquetipoSelecionado = arquetipo;
+                        _trocarImage();
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text('Pontos disponíveis: $_pontosDisponiveis'),
+                Column(
+                  children: [
+                    ListTile(
+                      trailing: IconButton(
+                        onPressed: _addVida(),
+                        icon: Icon(Icons.plus_one),
+                      ),
+                      title: Text('Pontos de vida: $_pontosVida'),
+                      subtitle: Text('TODO: adicionar barra de progresso'),
+                    ),
+                    Divider(),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -72,13 +103,11 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
         .toList();
   }
 
-  List<DropdownMenuItem<Arquetipo>> _buildMenuItensArquetipo() {
+  List<DropdownMenuEntry<Arquetipo>> _buildMenuItensArquetipo() {
     return _arquetipos
         .map(
-          (arquetipo) => DropdownMenuItem(
-            value: arquetipo,
-            child: Text(arquetipo.getName()),
-          ),
+          (arquetipo) =>
+              DropdownMenuEntry(value: arquetipo, label: arquetipo.getName()),
         )
         .toList();
   }
@@ -109,5 +138,14 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
       return 'personagens/elf/elf_neutral.png';
     }
     return 'personagens/dwarf/dwarf_neutral.png';
+  }
+
+  _addVida() {
+    setState(() {
+      if (_pontosDisponiveis > 0) {
+        _pontosDisponiveis--;
+        _pontosVida++;
+      }
+    });
   }
 }
