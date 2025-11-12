@@ -33,18 +33,18 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   Arquetipo? _arquetipoSelecionado;
   int _pontosDisponiveis = 30;
   int _pontosVida = 0;
-  final int _pontosEscudo = 0;
-  final int _pontosVelocidade = 0;
+  int _pontosEscudo = 0;
+  int _pontosVelocidade = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Cadastro de herois')),
-      body: Padding(
-        padding: EdgeInsets.all(15),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(15),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -53,24 +53,30 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    DropdownMenu<Raca>(
-                      initialSelection: _racas[0],
-                      dropdownMenuEntries: _buildMenuItensRaca(),
-                      label: Text('Raça'),
-                      onSelected: (raca) {
-                        _racaSelecionada = raca;
-                        _trocarImage();
-                      },
+                    Expanded(
+                      child: DropdownMenu<Raca>(
+                        expandedInsets: EdgeInsets.zero,
+                        initialSelection: _racas[0],
+                        dropdownMenuEntries: _buildMenuItensRaca(),
+                        label: Text('Raça'),
+                        onSelected: (raca) {
+                          _racaSelecionada = raca;
+                          _trocarImage();
+                        },
+                      ),
                     ),
                     SizedBox(width: 10),
-                    DropdownMenu<Arquetipo>(
-                      initialSelection: _arquetipos[0],
-                      dropdownMenuEntries: _buildMenuItensArquetipo(),
-                      label: Text('Arquetipo'),
-                      onSelected: (arquetipo) {
-                        _arquetipoSelecionado = arquetipo;
-                        _trocarImage();
-                      },
+                    Expanded(
+                      child: DropdownMenu<Arquetipo>(
+                        expandedInsets: EdgeInsets.zero,
+                        initialSelection: _arquetipos[0],
+                        dropdownMenuEntries: _buildMenuItensArquetipo(),
+                        label: Text('Arquetipo'),
+                        onSelected: (arquetipo) {
+                          _arquetipoSelecionado = arquetipo;
+                          _trocarImage();
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -79,14 +85,43 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                 Column(
                   children: [
                     ListTile(
+                      leading: IconButton(
+                        onPressed: _minusVida,
+                        icon: Icon(Icons.exposure_minus_1),
+                      ),
                       trailing: IconButton(
-                        onPressed: _addVida(),
+                        onPressed: _addVida,
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de vida: $_pontosVida'),
-                      subtitle: Text('TODO: adicionar barra de progresso'),
+                      subtitle: _buildBar(30, _pontosVida),
                     ),
                     Divider(),
+                    ListTile(
+                      leading: IconButton(
+                        onPressed: _minusEscudo,
+                        icon: Icon(Icons.exposure_minus_1),
+                      ),
+                      trailing: IconButton(
+                        onPressed: _addEscudo,
+                        icon: Icon(Icons.plus_one),
+                      ),
+                      title: Text('Pontos de escudo: $_pontosEscudo'),
+                      subtitle: _buildBar(30, _pontosEscudo),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: IconButton(
+                        onPressed: _minusVelocidade,
+                        icon: Icon(Icons.exposure_minus_1),
+                      ),
+                      trailing: IconButton(
+                        onPressed: _addVelocidade,
+                        icon: Icon(Icons.plus_one),
+                      ),
+                      title: Text('Pontos de velocidade: $_pontosVelocidade'),
+                      subtitle: _buildBar(30, _pontosVelocidade),
+                    ),
                   ],
                 ),
               ],
@@ -140,12 +175,62 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
     return 'personagens/dwarf/dwarf_neutral.png';
   }
 
-  _addVida() {
+  void _addVida() {
     setState(() {
       if (_pontosDisponiveis > 0) {
         _pontosDisponiveis--;
         _pontosVida++;
       }
     });
+  }
+
+  void _minusVida() {
+    setState(() {
+      if (_pontosVida > 0) {
+        _pontosVida--;
+        _pontosDisponiveis++;
+      }
+    });
+  }
+
+  void _addEscudo() {
+    setState(() {
+      if (_pontosDisponiveis > 0) {
+        _pontosDisponiveis--;
+        _pontosEscudo++;
+      }
+    });
+  }
+
+  void _minusEscudo() {
+    setState(() {
+      if (_pontosEscudo > 0) {
+        _pontosEscudo--;
+        _pontosDisponiveis++;
+      }
+    });
+  }
+
+  void _addVelocidade() {
+    setState(() {
+      if (_pontosDisponiveis > 0) {
+        _pontosDisponiveis--;
+        _pontosVelocidade++;
+      }
+    });
+  }
+
+  void _minusVelocidade() {
+    setState(() {
+      if (_pontosVelocidade > 0) {
+        _pontosVelocidade--;
+        _pontosDisponiveis++;
+      }
+    });
+  }
+
+  Widget _buildBar(int valorTotal, int valorAtual) {
+    final percentual = valorAtual / valorTotal;
+    return LinearProgressIndicator(value: percentual);
   }
 }
