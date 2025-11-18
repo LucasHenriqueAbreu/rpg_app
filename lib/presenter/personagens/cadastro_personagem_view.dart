@@ -106,12 +106,7 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de vida: $_pontosVida'),
-                      subtitle: _buildSubTitle(
-                        _racaSelecionada,
-                        _arquetipoSelecionado,
-                        _pontosVida,
-                        30,
-                      ),
+                      subtitle: _buildBar(_pontosDisponiveis, _pontosVida),
                     ),
                     Divider(),
                     ListTile(
@@ -124,12 +119,7 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de escudo: $_pontosEscudo'),
-                      subtitle: _buildSubTitle(
-                        _racaSelecionada,
-                        _arquetipoSelecionado,
-                        _pontosEscudo,
-                        30,
-                      ),
+                      subtitle: _buildBar(_pontosDisponiveis, _pontosEscudo),
                     ),
                     Divider(),
                     ListTile(
@@ -142,11 +132,9 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de velocidade: $_pontosVelocidade'),
-                      subtitle: _buildSubTitle(
-                        _racaSelecionada,
-                        _arquetipoSelecionado,
+                      subtitle: _buildBar(
+                        _pontosDisponiveis,
                         _pontosVelocidade,
-                        30,
                       ),
                     ),
                   ],
@@ -259,37 +247,5 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   Widget _buildBar(int valorTotal, int valorAtual) {
     final percentual = valorAtual / valorTotal;
     return LinearProgressIndicator(value: percentual);
-  }
-
-  Widget _buildSubTitle(
-    Raca racaSelecionada,
-    Arquetipo arquetipoSelecionado,
-    int valorAtual,
-    int valorTotal,
-  ) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Chip(
-              label: Text(
-                'Bonus de vida: ${racaSelecionada.bonusVida + arquetipoSelecionado.bonusVida}',
-              ),
-            ),
-            Chip(
-              label: Text(
-                'Bonus de escudo: ${racaSelecionada.bonusEscudo + arquetipoSelecionado.bonusEscudo}',
-              ),
-            ),
-            Chip(
-              label: Text(
-                'Bonus de ataque: ${racaSelecionada.bonusAtaque + arquetipoSelecionado.bonusAtaque}',
-              ),
-            ),
-          ],
-        ),
-        _buildBar(valorTotal, valorAtual),
-      ],
-    );
   }
 }
