@@ -24,17 +24,25 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
     Elfo(bonusVida: 6, bonusEscudo: 8, bonusAtaque: 16),
     Anao(bonusVida: 12, bonusEscudo: 6, bonusAtaque: 12),
   ];
-  Raca? _racaSelecionada;
   final List<Arquetipo> _arquetipos = [
     Guerreiro(bonusVida: 8, bonusEscudo: 8, bonusAtaque: 14),
     Arqueiro(bonusVida: 5, bonusEscudo: 5, bonusAtaque: 20),
     Mago(bonusVida: 5, bonusEscudo: 10, bonusAtaque: 15),
   ];
-  Arquetipo? _arquetipoSelecionado;
+
+  late Raca _racaSelecionada;
+  late Arquetipo _arquetipoSelecionado;
   int _pontosDisponiveis = 30;
   int _pontosVida = 0;
   int _pontosEscudo = 0;
   int _pontosVelocidade = 0;
+
+  @override
+  void initState() {
+    _racaSelecionada = _racas[0];
+    _arquetipoSelecionado = _arquetipos[0];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +64,14 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                     Expanded(
                       child: DropdownMenu<Raca>(
                         expandedInsets: EdgeInsets.zero,
-                        initialSelection: _racas[0],
+                        initialSelection: _racaSelecionada,
                         dropdownMenuEntries: _buildMenuItensRaca(),
                         label: Text('Raça'),
                         onSelected: (raca) {
-                          _racaSelecionada = raca;
-                          _trocarImage();
+                          if (raca != null) {
+                            _racaSelecionada = raca;
+                            _trocarImage();
+                          }
                         },
                       ),
                     ),
@@ -69,12 +79,14 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                     Expanded(
                       child: DropdownMenu<Arquetipo>(
                         expandedInsets: EdgeInsets.zero,
-                        initialSelection: _arquetipos[0],
+                        initialSelection: _arquetipoSelecionado,
                         dropdownMenuEntries: _buildMenuItensArquetipo(),
                         label: Text('Arquetipo'),
                         onSelected: (arquetipo) {
-                          _arquetipoSelecionado = arquetipo;
-                          _trocarImage();
+                          if (arquetipo != null) {
+                            _arquetipoSelecionado = arquetipo;
+                            _trocarImage();
+                          }
                         },
                       ),
                     ),
@@ -94,7 +106,12 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de vida: $_pontosVida'),
-                      subtitle: _buildBar(30, _pontosVida),
+                      subtitle: _buildSubTitle(
+                        _racaSelecionada,
+                        _arquetipoSelecionado,
+                        _pontosVida,
+                        30,
+                      ),
                     ),
                     Divider(),
                     ListTile(
@@ -107,7 +124,12 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de escudo: $_pontosEscudo'),
-                      subtitle: _buildBar(30, _pontosEscudo),
+                      subtitle: _buildSubTitle(
+                        _racaSelecionada,
+                        _arquetipoSelecionado,
+                        _pontosEscudo,
+                        30,
+                      ),
                     ),
                     Divider(),
                     ListTile(
@@ -120,7 +142,12 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                         icon: Icon(Icons.plus_one),
                       ),
                       title: Text('Pontos de velocidade: $_pontosVelocidade'),
-                      subtitle: _buildBar(30, _pontosVelocidade),
+                      subtitle: _buildSubTitle(
+                        _racaSelecionada,
+                        _arquetipoSelecionado,
+                        _pontosVelocidade,
+                        30,
+                      ),
                     ),
                   ],
                 ),
@@ -232,5 +259,37 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   Widget _buildBar(int valorTotal, int valorAtual) {
     final percentual = valorAtual / valorTotal;
     return LinearProgressIndicator(value: percentual);
+  }
+
+  Widget _buildSubTitle(
+    Raca racaSelecionada,
+    Arquetipo arquetipoSelecionado,
+    int valorAtual,
+    int valorTotal,
+  ) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Chip(
+              label: Text(
+                'Bonus de vida: ${racaSelecionada.bonusVida + arquetipoSelecionado.bonusVida}',
+              ),
+            ),
+            Chip(
+              label: Text(
+                'Bonus de escudo: ${racaSelecionada.bonusEscudo + arquetipoSelecionado.bonusEscudo}',
+              ),
+            ),
+            Chip(
+              label: Text(
+                'Bonus de ataque: ${racaSelecionada.bonusAtaque + arquetipoSelecionado.bonusAtaque}',
+              ),
+            ),
+          ],
+        ),
+        _buildBar(valorTotal, valorAtual),
+      ],
+    );
   }
 }
