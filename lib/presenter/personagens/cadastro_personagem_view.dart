@@ -36,11 +36,15 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   int _pontosVida = 0;
   int _pontosEscudo = 0;
   int _pontosVelocidade = 0;
+  String _nome = '';
+  String _reino = '';
+  String _missao = '';
 
   @override
   void initState() {
     _racaSelecionada = _racas[0];
     _arquetipoSelecionado = _arquetipos[0];
+    _trocarImage();
     super.initState();
   }
 
@@ -56,6 +60,36 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Nome',
+                  ),
+                  onChanged: (valor) {
+                    _nome = valor;
+                  },
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Reino',
+                  ),
+                  onChanged: (valor) {
+                    _reino = valor;
+                  },
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Missão',
+                  ),
+                  onChanged: (valor) {
+                    _missao = valor;
+                  },
+                ),
+                SizedBox(height: 10),
                 Image.asset(_imgHeroi, height: 300, fit: BoxFit.contain),
                 SizedBox(height: 10),
                 Row(
@@ -139,6 +173,8 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+                ElevatedButton(onPressed: () {}, child: Text('Salvar')),
               ],
             ),
           ),
