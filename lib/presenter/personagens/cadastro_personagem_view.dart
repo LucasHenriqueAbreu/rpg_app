@@ -4,6 +4,7 @@ import 'package:rpg_app/domain/entities/arqueiro.dart';
 import 'package:rpg_app/domain/entities/arquetipo.dart';
 import 'package:rpg_app/domain/entities/elfo.dart';
 import 'package:rpg_app/domain/entities/guerreiro.dart';
+import 'package:rpg_app/domain/entities/heroi.dart';
 import 'package:rpg_app/domain/entities/humano.dart';
 import 'package:rpg_app/domain/entities/mago.dart';
 import 'package:rpg_app/domain/entities/orc.dart';
@@ -17,6 +18,7 @@ class CadastroPersonagemView extends StatefulWidget {
 }
 
 class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _imgHeroi = 'personagens/dwarf/dwarf_mage.png';
   final List<Raca> _racas = [
     Humano(bonusVida: 10, bonusEscudo: 10, bonusAtaque: 10),
@@ -60,35 +62,7 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Nome',
-                  ),
-                  onChanged: (valor) {
-                    _nome = valor;
-                  },
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Reino',
-                  ),
-                  onChanged: (valor) {
-                    _reino = valor;
-                  },
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Missão',
-                  ),
-                  onChanged: (valor) {
-                    _missao = valor;
-                  },
-                ),
+                _buildForm(),
                 SizedBox(height: 10),
                 Image.asset(_imgHeroi, height: 300, fit: BoxFit.contain),
                 SizedBox(height: 10),
@@ -174,7 +148,25 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                ElevatedButton(onPressed: () {}, child: Text('Salvar')),
+                ElevatedButton(
+                  onPressed: () {
+                    final isValid = _formKey.currentState?.validate() ?? false;
+                    if (isValid) {
+                      _formKey.currentState?.save();
+                      final newHeroi = Heroi(
+                        reino: _reino,
+                        missao: _missao,
+                        nome: _nome,
+                        vida: _pontosVida,
+                        escudo: _pontosEscudo,
+                        velocidade: _pontosVelocidade,
+                        raca: _racaSelecionada,
+                      );
+                      print(newHeroi);
+                    }
+                  },
+                  child: Text('Salvar'),
+                ),
               ],
             ),
           ),
@@ -283,5 +275,68 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   Widget _buildBar(int valorTotal, int valorAtual) {
     final percentual = valorAtual / valorTotal;
     return LinearProgressIndicator(value: percentual);
+  }
+
+  Form _buildForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Nome',
+            ),
+            validator: (valor) {
+              if (valor == null || valor.isEmpty) {
+                return 'Nome é obrigatório';
+              }
+              return null;
+            },
+            onSaved: (valor) {
+              if (valor != null) {
+                _nome = valor;
+              }
+            },
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Reino',
+            ),
+            validator: (valor) {
+              if (valor == null || valor.isEmpty) {
+                return 'Reino é obrigatório';
+              }
+              return null;
+            },
+            onSaved: (valor) {
+              if (valor != null) {
+                _reino = valor;
+              }
+            },
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Missão',
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Missão é obrigatória';
+              }
+              return null;
+            },
+            onSaved: (valor) {
+              if (valor != null) {
+                _missao = valor;
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
