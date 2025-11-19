@@ -41,6 +41,7 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
   String _nome = '';
   String _reino = '';
   String _missao = '';
+  bool _pointsWithError = false;
 
   @override
   void initState() {
@@ -102,6 +103,7 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                 ),
                 SizedBox(height: 10),
                 Text('Pontos disponíveis: $_pontosDisponiveis'),
+                _buildErrorPointsMessage(),
                 Column(
                   children: [
                     ListTile(
@@ -151,6 +153,9 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
                 ElevatedButton(
                   onPressed: () {
                     final isValid = _formKey.currentState?.validate() ?? false;
+                    setState(() {
+                      _pointsWithError = _pontosDisponiveis > 0;
+                    });
                     if (isValid) {
                       _formKey.currentState?.save();
                       final newHeroi = Heroi(
@@ -338,5 +343,15 @@ class _CadastroPersonagemViewState extends State<CadastroPersonagemView> {
         ],
       ),
     );
+  }
+
+  Widget _buildErrorPointsMessage() {
+    if (_pointsWithError) {
+      return Text(
+        'Você possui pontos para distribuir',
+        style: TextStyle(color: Colors.red),
+      );
+    }
+    return SizedBox.shrink();
   }
 }
